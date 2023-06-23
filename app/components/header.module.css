@@ -1,0 +1,54 @@
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+
+.circle_eye {
+    display: block;
+    background: black;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    margin-left: 15px;
+    background: radial-gradient(circle at 15px 9px, #5cabff, #000);
+    border: 3.5px solid lightgray;
+    /* -webkit-animation:blink 1.5s infinite;
+    -webkit-animation: ; */
+}
+
+.change_color {
+    background: green;
+}
