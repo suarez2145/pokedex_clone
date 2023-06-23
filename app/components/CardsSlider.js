@@ -38,13 +38,6 @@ export default function cardSlider() {
                 let pokeEngDisc;
                 console.log(pokeDescription);
 
-                // pokeDescription.forEach(function (flavorEntries) {
-                //     if (flavorEntries.language.name == "en") {
-                //         console.log(flavorEntries.flavor_text);
-                //         return;
-                //     }
-                // });
-
                 // looping over the fetch call to pokemon species flavor text which returns array of descriptions in many languages...then only returning english text  
                 for (let i = 0; i < pokeDescription.length; i++) {
                     if (pokeDescription[i].language.name == "en") {
@@ -89,37 +82,40 @@ export default function cardSlider() {
     // *** ONLY UNTIL API CALL RESOLVES AND STATE IS UPDATED WITH RETURNED DATA WILL MY CARD DIVS BE RENDERD 
     if (state.pokemonList) {
         return (
-            <Carousel interval={null}>
-            {/* use map to loop over my pokemonList array of object and render a card foreach data set  */}
-            { state.pokemonList.map((pokemon,i) => {
-                return (
-                    <Carousel.Item key={i}>
-                        <Card style={{ width: '18rem' }}>
-                            <span className="d-flex justify-content-end">
-                                <p className="p-2">{`${pokemon.hp}`}HP</p>
-                            </span>
-                            <Card.Img variant="top" src={`${pokemon.imgUrl}`} />
-                            <Card.Body>
-                                <Card.Title className="d-flex justify-content-between align-items-center">
-                                    <span>{`${pokemon.name}`}</span>
-                                    <img style={{"height" : "35px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
-                                </Card.Title>
-                                <Card.Text>
-                                    {`${pokemon.description}`}
-                                </Card.Text>
-                                <ListGroup horizontal className="text-center">
-                                    <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
-                                    <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
-                                    <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
-                                </ListGroup>
-                            </Card.Body>
-                        </Card>
-                    </Carousel.Item>
-                );
-            })}
-            </Carousel>
+            <div className="container carousel_wrapper mt-5 d-flex justify-content-center">
+                <Carousel interval={null} style={{"width" : "25vw", "height":"100%"}}>
+                { state.pokemonList.map((pokemon,i) => {
+                    return (
+                        <Carousel.Item key={i}>
+                            <Card className="w-100 h-100">
+                                <span className="d-flex justify-content-end">
+                                    <p className="p-2">{`${pokemon.hp}`}HP</p>
+                                </span>
+                                <Card.Img variant="top" style={{"height" : "200px" , "width" : "auto"}} src={`${pokemon.imgUrl}`} />
+                                <Card.Body>
+                                    <Card.Title className="d-flex justify-content-between align-items-center">
+                                        <span>{`${pokemon.name}`}</span>
+                                        <img style={{"height" : "35px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
+                                    </Card.Title>
+                                    <Card.Text>
+                                        {`${pokemon.description}`}
+                                    </Card.Text>
+                                    <ListGroup horizontal className="text-center">
+                                        <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
+                                        <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
+                                        <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
+                                    </ListGroup>
+                                </Card.Body>
+                            </Card>
+                        </Carousel.Item>
+                    );
+                })}
+                </Carousel>
+            </div>
         )
     } else {
-        return <div>...<img style={{"height" : "85px" , "width" : "auto"}} src="/lucas_with_dragonite_by_liftedwing_d2sdg2i.gif" alt="my-gif...Loading" /></div>
+        return <div className="d-flex justify-content-center align-items-center" style={{"margin-top" : "15vh"}}>
+                    ... <img style={{"height" : "85px" , "width" : "auto"}} src="/lucas_with_dragonite_by_liftedwing_d2sdg2i.gif" alt="my-gif...Loading" />
+                </div>
     }
 }

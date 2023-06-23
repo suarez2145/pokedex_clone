@@ -10,7 +10,7 @@ export default function Page() {
 
 
     return (
-        <div className="container dash_cont">
+        <div className="container-fluid dash_cont">
             <CardsSlider/>
         </div>
     )
