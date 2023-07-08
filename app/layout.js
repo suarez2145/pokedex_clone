@@ -1,6 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import React from 'react';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from "./components/Header";
@@ -17,11 +18,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   
   return (
-    <html lang="en">
-      <body>
-        <Header/>
-        {children}
-        </body>
-    </html>
+    <UserProvider>
+      <html lang="en">
+        <body>
+            <Header/>
+            {children}
+          </body>
+      </html>
+    </UserProvider>
   )
 }
