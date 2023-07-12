@@ -1,0 +1,73 @@
+@import "../node_modules/bootstrap/scss/functions";
+
+// Optional variable overrides here
+
+// declaring new colors that i want to place in the bootstrap default them colors 
+$bug-type: #125f3b;
+$dragon-type: #5088BC;
+$fairy-type: #ff84e6;
+$fighting-type: #F4648A;
+$flying-type: #507CD4;
+$ghost-type: #5E64D0;
+$ground-type: #E88244;
+$poison-type: #BC52E8;
+$psychic-type: #FF8882;
+$rock-type: #C4AE70;
+$steel-type: #5EA0B2;
+
+
+// added this to scale down the new table row colors a couple shades 
+$table-bg-scale: -45% !default;
+// adding all my declared new colors into a variable that i can pass to map-merge below to merge them into bootstrap default color themes 
+$custom-theme-colors: (
+    "bug": $bug-type,
+    "dragon": $dragon-type,
+    "fairy": $fairy-type,
+    "fighting": $fighting-type,
+    "flying": $flying-type,
+    "ghost": $ghost-type,
+    "ground": $ground-type,
+    "poison": $poison-type,
+    "psychic": $psychic-type,
+    "rock": $rock-type,
+    "steel": $steel-type,
+    
+);
+
+// declaring my new table row colors that i want to aadd to the bootstrao default so i can use my api call pokemon types to color table row abckgrounds
+$custom-table-colors: (
+    "bug": shift-color($bug-type, $table-bg-scale),
+    "dragon": shift-color($dragon-type, $table-bg-scale),
+    "fairy": shift-color($fairy-type, $table-bg-scale),
+    "fighting": shift-color($fighting-type, $table-bg-scale),
+    "flying": shift-color($flying-type, $table-bg-scale),
+    "ghost": shift-color($ghost-type, $table-bg-scale),
+    "ground": shift-color($ground-type, $table-bg-scale),
+    "poison": shift-color($poison-type, $table-bg-scale),
+    "psychic": shift-color($psychic-type, $table-bg-scale),
+    "rock": shift-color($rock-type, $table-bg-scale),
+    "steel": shift-color($steel-type, $table-bg-scale),
+    
+);
+
+
+// Variables come next
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+// Optional Sass map overrides here
+$theme-colors: map-merge($theme-colors, $custom-theme-colors);
+$table-variants: map-merge($table-variants, $custom-table-colors);
+
+// Followed by our default maps
+@import "../node_modules/bootstrap/scss/maps";
+
+// Rest of our imports
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+// without this api utlities my colors wouldnt get generated a bg and txt variant from bootstrap ******* very important *********
+@import "../node_modules/bootstrap/scss/utilities/api";
+@import "../node_modules/bootstrap/scss/root";
+// ***** imported this because new table variants were not being applied when new class EX: "table-fairy" was declared in html ....this fixed it but need to narrow down which import fixed it??
+@import "../node_modules/bootstrap/scss/bootstrap.scss"
+

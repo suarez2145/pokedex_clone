@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
-import styles from './header.module.css';
+import styles from './header.module.scss';
 import Link from 'next/link';
 
 

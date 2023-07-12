@@ -1,12 +1,12 @@
 "use client";
 import { useEffect,useState } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
-import styles from "./dashboard.module.css";
+import styles from './dashboard.module.scss';
 import CardsSlider from "../components/CardsSlider";
 import StarterPokemon from "../components/StarterPokemon"
 import Pokedex from 'pokedex-promise-v2';
 
-export default function Page(props) {
+export default function Page() {
 
 
         useEffect(() => {
@@ -56,7 +56,7 @@ export default function Page(props) {
                     }
     
                     let pokeDataDreamImg;
-    
+                    console.log(pokeDataObj.sprites.versions["generation-vii"].icons.front_default);
                     // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
                     pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
                     console.log(pokeDataObj);
@@ -70,6 +70,7 @@ export default function Page(props) {
                         defense: pokeDataObj.stats[2].base_stat,
                         speed: pokeDataObj.stats[5].base_stat,
                         type: pokeDataObj.types[0].type.name,
+                        icon: pokeDataObj.sprites.versions["generation-vii"].icons.front_default,
                         description: pokeEngDisc
                     }
     
@@ -133,6 +134,7 @@ export default function Page(props) {
                     defense: pokeDataObj.stats[2].base_stat,
                     speed: pokeDataObj.stats[5].base_stat,
                     type: pokeDataObj.types[0].type.name,
+                    icon: pokeDataObj.sprites.versions["generation-vii"].icons.front_default,
                     description: pokeEngDisc
                 }
     
@@ -143,14 +145,37 @@ export default function Page(props) {
                 setState({
                     ...state, pokemonList
                 });
-
-                console.log("new batch!!!!!!!!!!!!!!!!!!!!")
+                
             }
         }));
 
-        const addToStarter = () => {
+        // new pokemon Array that we will use as a placholder to later push into our starterList 
+        let newAdditionPokeList = [];
+        const addToStarter = (pokemonDetails) => {
+            let currentPokemon = pokemonDetails;
+            let newAdditionPoke;
+            for(let i = 0; i < state.pokemonList.length; i++) {
+                if(state.pokemonList[i].name == currentPokemon) {
+                    newAdditionPoke = state.pokemonList[i]; 
+                    let isInArray = starterList.includes(newAdditionPoke);
+                    // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList
+                    if(!isInArray) {
+                        newAdditionPokeList.push(newAdditionPoke);
+                        setStartList([
+                            ...starterList, ...newAdditionPokeList
+                        ]);
+                    }
+                    // need to ad an else which will notify user that the chosen pokemon is already in thier list or library 
+
+                }
+            }
 
         }
+
+
+
+
+        console.log(starterList);
 
 
 
@@ -165,9 +190,9 @@ export default function Page(props) {
 
     if(user) {
         return (
-            <div className="container-fluid dash_cont row">
-                <CardsSlider pokemon={state.pokemonList} getNewPokemon={getNewPokemon}/>
-                <StarterPokemon />
+            <div className={`container-fluid dash_cont row`}>
+                <CardsSlider pokemon={state.pokemonList} getNewPokemon={getNewPokemon} addToStarter={addToStarter}/>
+                <StarterPokemon addToStarter={addToStarter} starterPokemon={starterList}/>
             </div>
         )
     }

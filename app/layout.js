@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import './globals.css'
+import './globals.scss'
 import { Inter } from 'next/font/google'
 import Header from "./components/Header";
 

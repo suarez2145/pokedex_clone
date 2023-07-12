@@ -5,8 +5,8 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Pokedex from 'pokedex-promise-v2';
 
-
-export default function cardSlider({pokemon, getNewPokemon}) {
+// ****************************  need to add addToStarter function to each carousel card ********************
+export default function cardSlider({pokemon, getNewPokemon, addToStarter}) {
     // setting my state to empty array 
     // const [state, setState] = useState([]);
     // // creating a new instance of Pokedex according to the pokeAPI wrapper package 
@@ -152,7 +152,7 @@ export default function cardSlider({pokemon, getNewPokemon}) {
                 <Carousel interval={null} style={{"width" : "20rem", "height":"100%"}}>
                 { pokemon.map((pokemon,i) => {
                     return (
-                        <Carousel.Item key={i}>
+                        <Carousel.Item key={i} id={`${pokemon.name}`}>
                             <Card className="w-100 h-100 rounded-0">
                                 <span className="d-flex justify-content-end">
                                     <p className="p-2">{`${pokemon.hp}`}HP</p>
@@ -171,14 +171,17 @@ export default function cardSlider({pokemon, getNewPokemon}) {
                                         <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
                                         <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
                                     </ListGroup>
+                                    <Button className="rounded-0" onClick={() => addToStarter(pokemon.name)}>Add To Starter</Button>
                                 </Card.Body>
                             </Card>
                         </Carousel.Item>
+                        
                     );
                 })}
                 </Carousel>
                 <div className="new-pokemon-wrapper mt-2 d-flex justify-content-end"style={{"width" : "20rem"}}>
                     <Button className="rounded-0" onClick={getNewPokemon}>New Batch</Button>
+                    {/* <Button className="rounded-0" onClick={addToStarter(`${pokemon.name}`)}>SEE ID</Button> */}
                 </div>
             </div>
         )
