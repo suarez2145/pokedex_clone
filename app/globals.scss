@@ -17,7 +17,7 @@ $steel-type: #5EA0B2;
 
 
 // added this to scale down the new table row colors a couple shades 
-$table-bg-scale: -45% !default;
+$table-bg-scale: -75% !default;
 // adding all my declared new colors into a variable that i can pass to map-merge below to merge them into bootstrap default color themes 
 $custom-theme-colors: (
     "bug": $bug-type,

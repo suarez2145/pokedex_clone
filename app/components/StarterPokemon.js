@@ -1,6 +1,17 @@
 import { useEffect,useState } from "react";
 import classNames from "classnames";
-export default function StarterPokemon({starterPokemon}) {
+export default function StarterPokemon({starterPokemon,handleStarterDelete}) {
+
+    // function to remove pokemon from starter list 
+    // should not SET STATE in child component... created this function that calls function on parent component that UPDATES STATE  
+    const rmvStart = (index) =>{
+        starterPokemon.splice(index,1)
+        // passing the starterPokemon list to the function in the parent component which will update the STATE with my passed starterPokemon
+        handleStarterDelete(starterPokemon);
+
+    }
+
+
 
 // need to draw from dashboard page.js file and addToStarter function in order to create and loop through new starterList state object and populate list of starter pokemon
     console.log(starterPokemon);
@@ -12,10 +23,13 @@ export default function StarterPokemon({starterPokemon}) {
                         <thead>
                             <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Types</th>
                             <th scope="col">Hp</th>
                             <th scope="col">Atk</th>
                             <th scope="col">Def</th>
                             <th scope="col">Icon</th>
+                            <th scope="col"></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -40,15 +54,30 @@ export default function StarterPokemon({starterPokemon}) {
                                     "table-steel": pokemon.type == "steel",
                                     "table-psychic": pokemon.type == "psychic"
                                 });
-                                return (
+                                return pokemon.typeTwo ? (
                                     <tr key={i} id={`${pokemon.name}`} className={pokemonTypeClasses}>
-                                        <th>{`${pokemon.name}`}</th>
-                                        <td>{`${pokemon.hp}`}</td>
-                                        <td>{`${pokemon.attack}`}</td>
-                                        <td>{`${pokemon.defense}`}</td>
-                                        <td><img src={`${pokemon.icon}`}/></td>
+                                        <th className="align-middle">{`${pokemon.name}`}</th>
+                                        <td className="align-middle">
+                                            <img style={{"height" : "22px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
+                                            <img style={{"height" : "22px" , "width" : "auto"}} src={`/${pokemon.typeTwo}_type.png`} alt="Pokemon type" />
+                                        </td>
+                                        <td className="align-middle">{`${pokemon.hp}`}</td>
+                                        <td className="align-middle">{`${pokemon.attack}`}</td>
+                                        <td className="align-middle">{`${pokemon.defense}`}</td>
+                                        <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" onClick={() => rmvStart(i)} className="bg-transparent border-0 btn-lg"><i className="bi bi-x-lg"></i></button></td>
                                     </tr>
-                                );
+                                ): (
+                                    <tr key={i} id={`${pokemon.name}`} className={pokemonTypeClasses}>
+                                        <th className="align-middle">{`${pokemon.name}`}</th>
+                                        <td className="align-middle"><img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" /></td>
+                                        <td className="align-middle">{`${pokemon.hp}`}</td>
+                                        <td className="align-middle">{`${pokemon.attack}`}</td>
+                                        <td className="align-middle">{`${pokemon.defense}`}</td>
+                                        <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" className="bg-transparent border-0 btn-lg" onClick={() => rmvStart(i)}><i className="bi bi-x-lg"></i></button></td>
+                                    </tr>
+                                )
                             })}
                         </tbody>
                     </table>

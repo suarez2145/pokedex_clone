@@ -60,6 +60,13 @@ export default function Page() {
                     // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
                     pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
                     console.log(pokeDataObj);
+                    let typeOne = pokeDataObj.types[0].type.name;
+                    let typeTwo;
+                    // if(pokeDataObj.types[1]) {
+                    //     typeTwo = pokeDataObj.types[1].type.name;
+                    // }
+                    pokeDataObj.types[1] ? typeTwo = pokeDataObj.types[1].type.name : typeTwo = null;
+
     
                     // creating a new object with the fields i want to display parsed out from the api call information sent back 
                     let newObj = {
@@ -70,13 +77,13 @@ export default function Page() {
                         defense: pokeDataObj.stats[2].base_stat,
                         speed: pokeDataObj.stats[5].base_stat,
                         type: pokeDataObj.types[0].type.name,
+                        ...typeTwo && {typeTwo: typeTwo},
                         icon: pokeDataObj.sprites.versions["generation-vii"].icons.front_default,
                         description: pokeEngDisc
                     }
-    
+                    console.log(newObj)
                     // pushing my new object into my global pokemonList array
                     pokemonList.push(newObj);
-    
                     // using the setState method to update my state with the new object inside of my pokemonList 
                     setState({
                         ...state, pokemonList
@@ -120,11 +127,17 @@ export default function Page() {
                 }
     
                 let pokeDataDreamImg;
-    
                 // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
                 pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
                 console.log(pokeDataObj);
-    
+
+                let typeTwo;
+                // check pokeDataObj for a second "type" if there is one declare it as typeTwo if NOT then declare typeTwo as null
+                pokeDataObj.types[1] ? typeTwo = pokeDataObj.types[1].type.name : typeTwo = null;
+                
+                let pokeSprite;
+                // using ternary to check if there is an icon for "generation VII" if not then use the default sprite but if thre is then use it as the icon
+                pokeDataObj.sprites.versions["generation-vii"].icons.front_default == null ? pokeSprite = pokeDataObj.sprites.front_default : pokeSprite = pokeDataObj.sprites.versions["generation-vii"].icons.front_default;
                 // creating a new object with the fields i want to display parsed out from the api call information sent back 
                 let newObj = {
                     name: pokeDataObj.name, 
@@ -134,7 +147,8 @@ export default function Page() {
                     defense: pokeDataObj.stats[2].base_stat,
                     speed: pokeDataObj.stats[5].base_stat,
                     type: pokeDataObj.types[0].type.name,
-                    icon: pokeDataObj.sprites.versions["generation-vii"].icons.front_default,
+                    ...typeTwo && {typeTwo: typeTwo},
+                    icon: pokeSprite,
                     description: pokeEngDisc
                 }
     
@@ -149,28 +163,20 @@ export default function Page() {
             }
         }));
 
-        // new pokemon Array that we will use as a placholder to later push into our starterList 
-        let newAdditionPokeList = [];
-        const addToStarter = (pokemonDetails) => {
-            let currentPokemon = pokemonDetails;
-            let newAdditionPoke;
-            for(let i = 0; i < state.pokemonList.length; i++) {
-                if(state.pokemonList[i].name == currentPokemon) {
-                    newAdditionPoke = state.pokemonList[i]; 
-                    let isInArray = starterList.includes(newAdditionPoke);
-                    // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList
-                    if(!isInArray) {
-                        newAdditionPokeList.push(newAdditionPoke);
-                        setStartList([
-                            ...starterList, ...newAdditionPokeList
-                        ]);
-                    }
-                    // need to ad an else which will notify user that the chosen pokemon is already in thier list or library 
-
-                }
-            }
-
+        // function to handle updating of starterList state when child cardSlider component function to ADD pokemon is called by user 
+        const handleNewStarterAdd = (newAdditionPokeList) => {
+            setStartList([
+                ...starterList, ...newAdditionPokeList
+            ]);
         }
+
+        // function to handle updating of starterList state when child starterPokemon component function to REMOVE pokemon is called by user 
+        const handleStarterDelete = (newStarterPokemon) => {
+            setStartList([
+                ...newStarterPokemon
+            ]);
+        }
+
 
 
 
@@ -191,8 +197,8 @@ export default function Page() {
     if(user) {
         return (
             <div className={`container-fluid dash_cont row`}>
-                <CardsSlider pokemon={state.pokemonList} getNewPokemon={getNewPokemon} addToStarter={addToStarter}/>
-                <StarterPokemon addToStarter={addToStarter} starterPokemon={starterList}/>
+                <CardsSlider pokemon={state.pokemonList} getNewPokemon={getNewPokemon} starterList={starterList} handleNewStarterAdd={handleNewStarterAdd}/>
+                <StarterPokemon starterPokemon={starterList} handleStarterDelete={handleStarterDelete}/>
             </div>
         )
     }
