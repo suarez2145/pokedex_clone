@@ -5,8 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Pokedex from 'pokedex-promise-v2';
 
-// ****************************  need to add addToStarter function to each carousel card ********************
-export default function cardSlider({pokemon, getNewPokemon,starterList, handleNewStarterAdd}) {
+export default function cardSlider({pokemon,starterList,starterLibrary, handleNewStarterAdd, handleNewBatch, handleNewPokedexEntry}) {
 
     const addNewPokeToTeam = (pokemonDetails) => {
             let newAdditionPokeList = [];
@@ -26,12 +25,100 @@ export default function cardSlider({pokemon, getNewPokemon,starterList, handleNe
             }
     }
 
+    const addNewPokeToLibrary = (pokemonDetails) => {
+        let newLibraryPokemon = [];
+        let currentPokemon = pokemonDetails;
+        let newLibraryPoke;
+        for(let i = 0; i < pokemon.length; i++) {
+            if(pokemon[i].name == currentPokemon) {
+                newLibraryPoke = pokemon[i]; 
+                let isInArray = starterLibrary.includes(newLibraryPoke);
+                // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList  AND if the starterList has less than 6 pokemon in it
+                if(!isInArray) {
+                    newLibraryPokemon.push(newLibraryPoke);
+                    handleNewPokedexEntry(newLibraryPokemon);
+                }
+                // need to ad an else which will notify user that the chosen pokemon is already in thier list or library and if the list is full
+            }
+        }
+    }
+
+    const getNewPokemon = ((async () => {
+        const P = new Pokedex();
+        const setOffset = Math.floor(Math.random() * 1000);
+        const pokemonList = [];
+
+        const interval = {
+            offset: setOffset,
+            limit: 10,
+        };
+        // using the syntax from a pokeApi wrapper for more functionality ( instead of default pokeAPI promise commands and syntax)
+        const getList = await P.getPokemonsList(interval);
+
+        for(let i = 0; i < getList.results.length; i++) {
+            const poke = getList.results[i];
+            const pokeData = await fetch(poke.url);
+            console.log(poke);
+            const pokeDataObj = await pokeData.json();
+            const pokeDataSpecies = await fetch(pokeDataObj.species.url);
+            const pokeDataSpeciesObj = await pokeDataSpecies.json();
+            console.log(pokeDataSpeciesObj);
+            let pokeDescription = pokeDataSpeciesObj.flavor_text_entries;
+            let pokeEngDisc;
+            console.log(pokeDescription);
+
+            // looping over the fetch call to pokemon species flavor text which returns array of descriptions in many languages...then only returning english text  
+            for (let i = 0; i < pokeDescription.length; i++) {
+                if (pokeDescription[i].language.name == "en") {
+                    console.log(pokeDescription[i].flavor_text);
+                    pokeEngDisc = pokeDescription[i].flavor_text
+                    break;
+                }
+            }
+
+            let pokeDataDreamImg;
+            // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
+            pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
+            console.log(pokeDataObj);
+
+            let typeTwo;
+            // check pokeDataObj for a second "type" if there is one declare it as typeTwo if NOT then declare typeTwo as null
+            pokeDataObj.types[1] ? typeTwo = pokeDataObj.types[1].type.name : typeTwo = null;
+            
+            let pokeSprite;
+            // using ternary to check if there is an icon for "generation VII" if not then use the default sprite but if thre is then use it as the icon
+            pokeDataObj.sprites.versions["generation-vii"].icons.front_default == null ? pokeSprite = pokeDataObj.sprites.front_default : pokeSprite = pokeDataObj.sprites.versions["generation-vii"].icons.front_default;
+            // creating a new object with the fields i want to display parsed out from the api call information sent back 
+            let newObj = {
+                name: pokeDataObj.name, 
+                imgUrl: pokeDataDreamImg,
+                hp: pokeDataObj.stats[0].base_stat,
+                attack: pokeDataObj.stats[1].base_stat,
+                defense: pokeDataObj.stats[2].base_stat,
+                speed: pokeDataObj.stats[5].base_stat,
+                type: pokeDataObj.types[0].type.name,
+                ...typeTwo && {typeTwo: typeTwo},
+                icon: pokeSprite,
+                description: pokeEngDisc
+            }
+
+            // pushing my new object into my global pokemonList array
+            pokemonList.push(newObj);
+
+            // passing to the handlenewBatch imported function which sets state on the parent component
+            handleNewBatch(pokemonList);
+            
+        }
+    }));
+
+
+
     console.log(pokemon);
     // **** very important since STATE is UNDEFINED when page renders i checked for empty state if TRUE than i render a <DIV>...LOADING <DIV> 
     // *** ONLY UNTIL API CALL RESOLVES AND STATE IS UPDATED WITH RETURNED DATA WILL MY CARD DIVS BE RENDERD 
     if (pokemon) {
         return (
-            <div className="container-fluid g-0 flex-column carousel_wrapper align-items-center align-items-md-start  mt-5 d-flex col">
+            <div className="container-fluid g-3 flex-column carousel_wrapper align-items-center align-items-md-start  mt-5 d-flex col">
                 <div className="carousel-header-wrapper"style={{"width" : "20rem"}} >
                     <h3 className="carousel-header">
                         Explore New Pokemon?
@@ -62,7 +149,8 @@ export default function cardSlider({pokemon, getNewPokemon,starterList, handleNe
                                         <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
                                         <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
                                     </ListGroup>
-                                    <Button className="rounded-0" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                    <Button className="rounded-0 me-1" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                    <Button className="rounded-0" onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
                                 </Card.Body>
                             </Card>
                         </Carousel.Item>
@@ -87,7 +175,8 @@ export default function cardSlider({pokemon, getNewPokemon,starterList, handleNe
                                         <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
                                         <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
                                     </ListGroup>
-                                    <Button className="rounded-0" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                    <Button className="rounded-0 me-1" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                    <Button className="rounded-0" onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
                                 </Card.Body>
                             </Card>
                         </Carousel.Item>
@@ -95,7 +184,7 @@ export default function cardSlider({pokemon, getNewPokemon,starterList, handleNe
                 })}
                 </Carousel>
                 <div className="new-pokemon-wrapper mt-2 d-flex justify-content-end"style={{"width" : "20rem"}}>
-                    <Button className="rounded-0" onClick={getNewPokemon}>New Batch</Button>
+                    <Button className="rounded-0" onClick= {() => getNewPokemon()}>New Batch</Button>
                     {/* <Button className="rounded-0" onClick={addToStarter(`${pokemon.name}`)}>SEE ID</Button> */}
                 </div>
             </div>
