@@ -1,24 +1,35 @@
-import {useState,useEffect} from 'react';
+import {useState,useEffect,useContext} from 'react';
+import PokedexContext from '../components/context/PokedexContext';
 import Carousel from "react-bootstrap/Carousel";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Pokedex from 'pokedex-promise-v2';
 
-export default function cardSlider({pokemon,starterList,starterLibrary, handleNewStarterAdd, handleNewBatch, handleNewPokedexEntry}) {
+export default function cardSlider({}) {
+    const context = useContext(PokedexContext);
+    const { handleNewBatch } = useContext(PokedexContext);
+    const { handleNewPokedexEntry } = useContext(PokedexContext);
+    const { handleNewStarterAdd } = useContext(PokedexContext);
 
     const addNewPokeToTeam = (pokemonDetails) => {
             let newAdditionPokeList = [];
             let currentPokemon = pokemonDetails;
             let newAdditionPoke;
-            for(let i = 0; i < pokemon.length; i++) {
-                if(pokemon[i].name == currentPokemon) {
-                    newAdditionPoke = pokemon[i]; 
-                    let isInArray = starterList.includes(newAdditionPoke);
+            for(let i = 0; i < context.currentBatchPokemon.length; i++) {
+                if(context.currentBatchPokemon[i].name == currentPokemon) {
+                    newAdditionPoke = context.currentBatchPokemon[i]; 
+                    let isInArray = context.starterList.includes(newAdditionPoke);
+                    let isInLibArray = context.starterLibrary.includes(newAdditionPoke);
                     // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList  AND if the starterList has less than 6 pokemon in it
-                    if(!isInArray && starterList.length < 6) {
+                    if(!isInArray && context.starterList.length < 6) {
                         newAdditionPokeList.push(newAdditionPoke);
                         handleNewStarterAdd(newAdditionPokeList);
+                    }
+                    // checking pokedex library to make sure the current pokemon is not included and if not then we also add the new pokemon to the library
+                    if(!isInLibArray) {
+                        newAdditionPokeList.push(newAdditionPoke);
+                        handleNewPokedexEntry(newAdditionPokeList);
                     }
                     // need to ad an else which will notify user that the chosen pokemon is already in thier list or library and if the list is full
                 }
@@ -29,10 +40,10 @@ export default function cardSlider({pokemon,starterList,starterLibrary, handleNe
         let newLibraryPokemon = [];
         let currentPokemon = pokemonDetails;
         let newLibraryPoke;
-        for(let i = 0; i < pokemon.length; i++) {
-            if(pokemon[i].name == currentPokemon) {
-                newLibraryPoke = pokemon[i]; 
-                let isInArray = starterLibrary.includes(newLibraryPoke);
+        for(let i = 0; i < context.currentBatchPokemon.length; i++) {
+            if(context.currentBatchPokemon[i].name == currentPokemon) {
+                newLibraryPoke = context.currentBatchPokemon[i]; 
+                let isInArray = context.starterLibrary.includes(newLibraryPoke);
                 // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList  AND if the starterList has less than 6 pokemon in it
                 if(!isInArray) {
                     newLibraryPokemon.push(newLibraryPoke);
@@ -113,10 +124,10 @@ export default function cardSlider({pokemon,starterList,starterLibrary, handleNe
 
 
 
-    console.log(pokemon);
+    console.log(context.currentBatchPokemon);
     // **** very important since STATE is UNDEFINED when page renders i checked for empty state if TRUE than i render a <DIV>...LOADING <DIV> 
     // *** ONLY UNTIL API CALL RESOLVES AND STATE IS UPDATED WITH RETURNED DATA WILL MY CARD DIVS BE RENDERD 
-    if (pokemon) {
+    if (context.currentBatchPokemon) {
         return (
             <div className="container-fluid g-3 flex-column carousel_wrapper align-items-center align-items-md-start  mt-5 d-flex col">
                 <div className="carousel-header-wrapper"style={{"width" : "20rem"}} >
@@ -125,7 +136,7 @@ export default function cardSlider({pokemon,starterList,starterLibrary, handleNe
                     </h3>
                 </div>
                 <Carousel interval={null} style={{"width" : "20rem", "height":"100%"}}>
-                { pokemon.map((pokemon,i) => {
+                { context.currentBatchPokemon.map((pokemon,i) => {
                     return pokemon.typeTwo ? (
                         <Carousel.Item key={i} id={`${pokemon.name}`}>
                             <Card className="w-100 h-100 rounded-0">

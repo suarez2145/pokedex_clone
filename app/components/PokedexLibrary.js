@@ -1,8 +1,9 @@
 "use client";
-import { useEffect,useState } from "react";
+import { useEffect,useState, useContext } from "react";
+import PokedexContext from '../components/context/PokedexContext';
 import classNames from "classnames";
-export default function StarterPokemon({}) {
-
+export default function StarterPokemon() {
+    const { handleLibraryDelete } = useContext(PokedexContext);
     // function to remove pokemon from starter list 
     // should not SET STATE in child component... created this function that calls function on parent component that UPDATES STATE  
     // const rmvStart = (index) =>{
@@ -14,10 +15,17 @@ export default function StarterPokemon({}) {
     // }
 
 // need to draw from dashboard page.js file and addToStarter function in order to create and loop through new starterList state object and populate list of starter pokemon
-
+    const deleteLibraryPoke = (index) => {
+        console.log(index)
+        const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
+        starterLibraryPokedex.splice(index, 1);
+        // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
+        localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
+    }
 
     // retreiving the StarterList pokemon from localStorage in order to set it to map over it 
     const starterLibraryPokemon = JSON.parse(localStorage.getItem('starterLibrary'));
+
 
 
 
@@ -35,7 +43,6 @@ export default function StarterPokemon({}) {
                             <th scope="col">Def</th>
                             <th scope="col">Icon</th>
                             <th scope="col"></th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +80,7 @@ export default function StarterPokemon({}) {
                                         <td className="align-middle">{`${pokemon.attack}`}</td>
                                         <td className="align-middle">{`${pokemon.defense}`}</td>
                                         <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
-                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button"  className="bg-transparent border-0 btn-lg"><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button"  className="bg-transparent border-0 btn-lg" onClick={() => handleLibraryDelete(i)}><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
                                     </tr>
                                 ): (
                                     <tr key={i} id={`${pokemon.name}`} className={pokemonTypeClasses}>
@@ -83,7 +90,7 @@ export default function StarterPokemon({}) {
                                         <td className="align-middle">{`${pokemon.attack}`}</td>
                                         <td className="align-middle">{`${pokemon.defense}`}</td>
                                         <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
-                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" className="bg-transparent border-0 btn-lg"><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" className="bg-transparent border-0 btn-lg"onClick={() => handleLibraryDelete(i)}><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
                                     </tr>
                                 )
                             })}

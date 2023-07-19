@@ -1,12 +1,17 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import styles from './header.module.scss';
+import PokedexContext from '../components/context/PokedexContext';
 import Link from 'next/link';
-
+import { usePathname } from 'next/navigation'
 
 export default function header() {
+    
+    const context = useContext(PokedexContext);
     const { user, error, isLoading } = useUser();
+    // using usePAthname to get current route and conditionally render certain links based on current path
+    const pathname = usePathname()
 
     // added this useEffect and "use client" to allow bootstrapjs functionality on the client side...this component is now client side rendered 
     useEffect(() => {
@@ -15,7 +20,6 @@ export default function header() {
 
     if (user) {
         return (
-
             <nav className={`${styles.change_color} navbar navbar-expand-lg bg-body-tertiary`}>
                 <div className="container-fluid">
                     <span className="navbar-brand mb-0 h1 text-warning d-flex">
@@ -31,8 +35,18 @@ export default function header() {
                                 <Link className="nav-link active" href="#"> Welcome {user.name}</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link active" href="#"> Pokedex Library</Link>
+                                <Link className="nav-link active" href="#"> Welcome {context.userName}</Link>
                             </li>
+                            { pathname == "/dashboard" ?
+                                <li className="nav-item">
+                                    <Link className="nav-link active" href="/library"> Pokedex Library </Link>
+                                </li> : ""
+                            }
+                            { pathname == "/library" ?
+                                <li className="nav-item">
+                                    <Link className="nav-link active" href="/dashboard"> Dashboard </Link>
+                                </li> : ""
+                            }
                         </ul>
                         <span className="navbar-text">
                             <Link className="nav-link active" href="/api/auth/logout"> Sign Out?</Link>

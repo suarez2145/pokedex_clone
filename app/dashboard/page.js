@@ -1,8 +1,9 @@
 "use client";
-import { useEffect,useState } from "react";
+import { useEffect,useState,useContext } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import styles from './dashboard.module.scss';
 import CardsSlider from "../components/CardsSlider";
+import PokedexContext from '../components/context/PokedexContext';
 import StarterPokemon from "../components/StarterPokemon"
 import Pokedex from 'pokedex-promise-v2';
 import { Noto_Rashi_Hebrew } from "next/font/google";
@@ -12,9 +13,10 @@ export default function Page() {
         useEffect(() => {
             require("bootstrap/dist/js/bootstrap.bundle.min.js");
         }, []);
+        const { setInitialPokemonList } = useContext(PokedexContext);
 
-        const [starterList, setStartList] = useState([]);
-        const [starterLibrary, setlibrary] = useState([]);
+        // const [starterList, setStartList] = useState([]);
+        // const [starterLibrary, setlibrary] = useState([]);
 
 
         // setting my state to empty array 
@@ -91,48 +93,47 @@ export default function Page() {
                     // pushing my new object into my global pokemonList array
                     pokemonList.push(newObj);
                     // using the setState method to update my state with the new object inside of my pokemonList 
-                    setState({
-                        ...state, pokemonList
-                    });
+
+                    setInitialPokemonList(pokemonList)
                 }
             }))()
     
         }, [])
 
         // function to handle child component CardSlider function that gets new batch of pokemon and we update STATE here 
-        const handleNewBatch = (pokemonList) => {
+        // const handleNewBatch = (pokemonList) => {
 
-            setState({
-                ...state, pokemonList
-            });
+        //     setState({
+        //         ...state, pokemonList
+        //     });
 
-        }
+        // }
 
         // function to handle updating of starterList state when child cardSlider component function to ADD pokemon is called by user 
-        const handleNewStarterAdd = (newAdditionPokeList) => {
-            setStartList([
-                ...starterList, ...newAdditionPokeList
-            ]);
-            // retrieving the current localStorage
-            const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
-            // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-            starterListPokemon.push(newAdditionPokeList[0]);
-            // setting our localStorage to the updated starterList with our newly added pokemon
-            localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
+        // const handleNewStarterAdd = (newAdditionPokeList) => {
+        //     setStartList([
+        //         ...starterList, ...newAdditionPokeList
+        //     ]);
+        //     // retrieving the current localStorage
+        //     const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
+        //     // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
+        //     starterListPokemon.push(newAdditionPokeList[0]);
+        //     // setting our localStorage to the updated starterList with our newly added pokemon
+        //     localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
 
-        }
+        // }
 
-        const handleNewPokedexEntry = (newLibraryPokemon) => {
-            setlibrary([
-                ...starterLibrary, ...newLibraryPokemon
-            ]);
-            const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
-            // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-            starterLibraryPokedex.push(newLibraryPokemon[0]);
-            // setting our localStorage to the updated starterList with our newly added pokemon
-            localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
-            // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
-        }
+        // const handleNewPokedexEntry = (newLibraryPokemon) => {
+        //     setlibrary([
+        //         ...starterLibrary, ...newLibraryPokemon
+        //     ]);
+        //     const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
+        //     // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
+        //     starterLibraryPokedex.push(newLibraryPokemon[0]);
+        //     // setting our localStorage to the updated starterList with our newly added pokemon
+        //     localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
+        //     // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
+        // }
 
         // function to handle updating of starterList state when child starterPokemon component function to REMOVE pokemon is called by user 
         const handleStarterDelete = (newStarterPokemon) => {
@@ -142,25 +143,6 @@ export default function Page() {
             // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
             localStorage.setItem('starterList', JSON.stringify(newStarterPokemon));
         }
-
-        // retrieving the startList from localStorage and updating startList incase of page restart
-        useEffect(() => {
-            const localStartPokemons = JSON.parse(localStorage.getItem('starterList'));
-                setStartList([
-                    ...starterList, ...localStartPokemons
-                ]);
-        }, []);
-
-
-
-
-        console.log(starterList);
-
-
-
-
-
-
 
 
     const { user, error, isLoading } = useUser();
@@ -172,8 +154,8 @@ export default function Page() {
     if(user) {
         return (
             <div className={`container-fluid dash_cont g-0 row`}>
-                <CardsSlider pokemon={state.pokemonList} starterList={starterList} handleNewStarterAdd={handleNewStarterAdd} handleNewBatch={handleNewBatch} starterLibrary={starterLibrary} handleNewPokedexEntry={handleNewPokedexEntry}/>
-                <StarterPokemon starterPokemon={starterList} handleStarterDelete={handleStarterDelete}/>
+                <CardsSlider/>
+                <StarterPokemon/>
             </div>
         )
     }
