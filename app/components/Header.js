@@ -34,12 +34,9 @@ export default function header() {
                             <li className="nav-item">
                                 <Link className="nav-link active" href="#"> Welcome {user.name}</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" href="#"> Welcome {context.userName}</Link>
-                            </li>
                             { pathname == "/dashboard" ?
                                 <li className="nav-item">
-                                    <Link className="nav-link active" href="/library"> Pokedex Library </Link>
+                                    <Link className="nav-link active" href="/library"> Library </Link>
                                 </li> : ""
                             }
                             { pathname == "/library" ?

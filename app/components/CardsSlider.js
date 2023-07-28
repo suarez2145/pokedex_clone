@@ -27,7 +27,7 @@ export default function cardSlider({}) {
                         handleNewStarterAdd(newAdditionPokeList);
                     }
                     // checking pokedex library to make sure the current pokemon is not included and if not then we also add the new pokemon to the library
-                    if(!isInLibArray) {
+                    if(!isInLibArray && context.starterList.length < 6) {
                         newAdditionPokeList.push(newAdditionPoke);
                         handleNewPokedexEntry(newAdditionPokeList);
                     }
@@ -69,19 +69,15 @@ export default function cardSlider({}) {
         for(let i = 0; i < getList.results.length; i++) {
             const poke = getList.results[i];
             const pokeData = await fetch(poke.url);
-            console.log(poke);
             const pokeDataObj = await pokeData.json();
             const pokeDataSpecies = await fetch(pokeDataObj.species.url);
             const pokeDataSpeciesObj = await pokeDataSpecies.json();
-            console.log(pokeDataSpeciesObj);
             let pokeDescription = pokeDataSpeciesObj.flavor_text_entries;
             let pokeEngDisc;
-            console.log(pokeDescription);
 
             // looping over the fetch call to pokemon species flavor text which returns array of descriptions in many languages...then only returning english text  
             for (let i = 0; i < pokeDescription.length; i++) {
                 if (pokeDescription[i].language.name == "en") {
-                    console.log(pokeDescription[i].flavor_text);
                     pokeEngDisc = pokeDescription[i].flavor_text
                     break;
                 }
@@ -90,7 +86,6 @@ export default function cardSlider({}) {
             let pokeDataDreamImg;
             // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
             pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
-            console.log(pokeDataObj);
 
             let typeTwo;
             // check pokeDataObj for a second "type" if there is one declare it as typeTwo if NOT then declare typeTwo as null
@@ -124,7 +119,6 @@ export default function cardSlider({}) {
 
 
 
-    console.log(context.currentBatchPokemon);
     // **** very important since STATE is UNDEFINED when page renders i checked for empty state if TRUE than i render a <DIV>...LOADING <DIV> 
     // *** ONLY UNTIL API CALL RESOLVES AND STATE IS UPDATED WITH RETURNED DATA WILL MY CARD DIVS BE RENDERD 
     if (context.currentBatchPokemon) {

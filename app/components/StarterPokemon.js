@@ -2,17 +2,26 @@
 import { useEffect,useState,useContext } from "react";
 import PokedexContext from '../components/context/PokedexContext';
 import classNames from "classnames";
-export default function StarterPokemon({}) {
+export default function StarterPokemon() {
     const context = useContext(PokedexContext);
+    const { reloadStarters } = useContext(PokedexContext);
     const { handleStarterDelete } = useContext(PokedexContext);
-    // function to remove pokemon from starter list 
-    // should not SET STATE in child component... created this function that calls function on parent component that UPDATES STATE  
 
-// need to draw from dashboard page.js file and addToStarter function in order to create and loop through new starterList state object and populate list of starter pokemon
-    console.log(context.starterList);
 
     // retreiving the StarterList pokemon from localStorage in order to set it to map over it 
-    const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
+    // const starterListPokemon = context.starterList;
+    useEffect(() => {
+        reloadStarters()
+        const starterListPokemon  = JSON.parse(localStorage.getItem('starterList'));
+        console.log("******************** starterPokemon COmponent ****************")
+        console.log(starterListPokemon)
+        console.log("******************** starterPokemon COmponent ****************")
+        localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
+        console.log("****** set was called ********8")
+
+    }, []);
+
+    const starterListPokemon  = JSON.parse(localStorage.getItem('starterList'));
 
 
     return (

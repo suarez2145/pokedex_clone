@@ -15,10 +15,6 @@ export default function Page() {
         }, []);
         const { setInitialPokemonList } = useContext(PokedexContext);
 
-        // const [starterList, setStartList] = useState([]);
-        // const [starterLibrary, setlibrary] = useState([]);
-
-
         // setting my state to empty array 
         const [state, setState] = useState([]);
         // creating a new instance of Pokedex according to the pokeAPI wrapper package 
@@ -41,29 +37,23 @@ export default function Page() {
                 for(let i = 0; i < getList.results.length; i++) {
                     const poke = getList.results[i];
                     const pokeData = await fetch(poke.url);
-                    console.log(poke);
                     const pokeDataObj = await pokeData.json();
                     const pokeDataSpecies = await fetch(pokeDataObj.species.url);
                     const pokeDataSpeciesObj = await pokeDataSpecies.json();
-                    console.log(pokeDataSpeciesObj);
                     let pokeDescription = pokeDataSpeciesObj.flavor_text_entries;
                     let pokeEngDisc;
-                    console.log(pokeDescription);
     
                     // looping over the fetch call to pokemon species flavor text which returns array of descriptions in many languages...then only returning english text  
                     for (let i = 0; i < pokeDescription.length; i++) {
                         if (pokeDescription[i].language.name == "en") {
-                            console.log(pokeDescription[i].flavor_text);
                             pokeEngDisc = pokeDescription[i].flavor_text
                             break;
                         }
                     }
     
                     let pokeDataDreamImg;
-                    console.log(pokeDataObj.sprites.versions["generation-vii"].icons.front_default);
                     // conditional to check for dream_world image and if not found than set "pokeDataDreamImg" to the default sprite
                     pokeDataObj.sprites.other.dream_world.front_default ? pokeDataDreamImg = pokeDataObj.sprites.other.dream_world.front_default : pokeDataDreamImg = pokeDataObj.sprites.front_default;
-                    console.log(pokeDataObj);
                     let typeOne = pokeDataObj.types[0].type.name;
                     let typeTwo;
                     // if(pokeDataObj.types[1]) {
@@ -89,7 +79,6 @@ export default function Page() {
                         icon: pokeSprite,
                         description: pokeEngDisc
                     }
-                    console.log(newObj)
                     // pushing my new object into my global pokemonList array
                     pokemonList.push(newObj);
                     // using the setState method to update my state with the new object inside of my pokemonList 
@@ -100,70 +89,25 @@ export default function Page() {
     
         }, [])
 
-        // function to handle child component CardSlider function that gets new batch of pokemon and we update STATE here 
-        // const handleNewBatch = (pokemonList) => {
+        const { user, error, isLoading } = useUser();
 
-        //     setState({
-        //         ...state, pokemonList
-        //     });
+        if (isLoading) return <div>Loading...</div>;
+        if (error) return <div>{error.message}</div>;
 
-        // }
 
-        // function to handle updating of starterList state when child cardSlider component function to ADD pokemon is called by user 
-        // const handleNewStarterAdd = (newAdditionPokeList) => {
-        //     setStartList([
-        //         ...starterList, ...newAdditionPokeList
-        //     ]);
-        //     // retrieving the current localStorage
-        //     const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
-        //     // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-        //     starterListPokemon.push(newAdditionPokeList[0]);
-        //     // setting our localStorage to the updated starterList with our newly added pokemon
-        //     localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
-
-        // }
-
-        // const handleNewPokedexEntry = (newLibraryPokemon) => {
-        //     setlibrary([
-        //         ...starterLibrary, ...newLibraryPokemon
-        //     ]);
-        //     const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
-        //     // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-        //     starterLibraryPokedex.push(newLibraryPokemon[0]);
-        //     // setting our localStorage to the updated starterList with our newly added pokemon
-        //     localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
-        //     // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
-        // }
-
-        // function to handle updating of starterList state when child starterPokemon component function to REMOVE pokemon is called by user 
-        const handleStarterDelete = (newStarterPokemon) => {
-            setStartList([
-                ...newStarterPokemon
-            ]);
-            // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
-            localStorage.setItem('starterList', JSON.stringify(newStarterPokemon));
+        if(user) {
+            return (
+                <div className={`container-fluid dash_cont g-0 row`}>
+                    <CardsSlider/>
+                    <StarterPokemon/>
+                </div>
+            )
         }
 
-
-    const { user, error, isLoading } = useUser();
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>{error.message}</div>;
-
-
-    if(user) {
         return (
-            <div className={`container-fluid dash_cont g-0 row`}>
-                <CardsSlider/>
-                <StarterPokemon/>
+            <div>
+                <h1> PLease Login</h1> <a href="/api/auth/login">Login</a>
             </div>
         )
-    }
-
-    return (
-        <div>
-            <h1> PLease Login</h1> <a href="/api/auth/login">Login</a>
-        </div>
-    )
 
 }

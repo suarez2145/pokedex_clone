@@ -21,48 +21,48 @@ const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({ children }) {
 
 
-        const [starterList, setStartList] = useState([]);
-        const [starterLibrary, setlibrary] = useState([]);
-        // setting my state to empty array 
-        const [state, setState] = useState([]);
-        const currentBatchPokemon = state.pokemonList;
+    const [starterList, setStartList] = useState([]);
+    const [starterLibrary, setlibrary] = useState([]);
+    // setting my state to empty array 
+    const [state, setState] = useState([]);
+    const currentBatchPokemon = state.pokemonList;
 
-        const setInitialPokemonList = (pokemonList) => {
-            setState({
-              ...state, pokemonList
-          });
-        }
+    const setInitialPokemonList = (pokemonList) => {
+        setState({
+          ...state, pokemonList
+      });
+    }
 
-        const handleNewBatch = (pokemonList) => {
-          setState({
-              ...state, pokemonList
-          });
-      }
+    const handleNewBatch = (pokemonList) => {
+      setState({
+          ...state, pokemonList
+      });
+    }
 
               // function to handle updating of starterList state when child cardSlider component function to ADD pokemon is called by user 
-        const handleNewStarterAdd = (newAdditionPokeList) => {
-          setStartList([
-              ...starterList, ...newAdditionPokeList
-          ]);
-          // retrieving the current localStorage
-          const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
-          // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-          starterListPokemon.push(newAdditionPokeList[0]);
-          // setting our localStorage to the updated starterList with our newly added pokemon
-          localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
+    const handleNewStarterAdd = (newAdditionPokeList) => {
+      setStartList([
+          ...starterList, ...newAdditionPokeList
+      ]);
+      // retrieving the current localStorage
+      const starterListPokemon = JSON.parse(localStorage.getItem('starterList'));
+      // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
+      starterListPokemon.push(newAdditionPokeList[0]);
+      // setting our localStorage to the updated starterList with our newly added pokemon
+      localStorage.setItem('starterList', JSON.stringify(starterListPokemon));
 
-      }
+    }
 
-      const handleNewPokedexEntry = (newLibraryPokemon) => {
-        setlibrary([
-            ...starterLibrary, ...newLibraryPokemon
-        ]);
-        const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
-        // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
-        starterLibraryPokedex.push(newLibraryPokemon[0]);
-        // setting our localStorage to the updated starterList with our newly added pokemon
-        localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
-        // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
+    const handleNewPokedexEntry = (newLibraryPokemon) => {
+      setlibrary([
+          ...starterLibrary, ...newLibraryPokemon
+      ]);
+      const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
+      // then adding our newly added pokemomn from the addToStarter function to the localStorage we retrieved 
+      starterLibraryPokedex.push(newLibraryPokemon[0]);
+      // setting our localStorage to the updated starterList with our newly added pokemon
+      localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
+      // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
     }
 
     const handleStarterDelete = (index) => {
@@ -72,53 +72,81 @@ export default function RootLayout({ children }) {
       ]);
       // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
       localStorage.setItem('starterList', JSON.stringify(starterList));
-  }
+    }
 
-  const handleLibraryDelete = (index) => {
-
-    const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
-    starterLibraryPokedex.splice(index, 1);
-    setlibrary([
-      ...starterLibraryPokedex
-    ]);
-    // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
-    localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
-
-    const localStartPokemons = JSON.parse(localStorage.getItem('starterList'));
-    localStartPokemons.splice(index,1)
-    setStartList([
-      ...localStartPokemons
-    ]);
-    localStorage.setItem('starterList', JSON.stringify(localStartPokemons));
-}
-
-      useEffect(() => {
-            const localStartPokemons = JSON.parse(localStorage.getItem('starterList'));
-                setStartList([
-                    ...starterList, ...localStartPokemons
-                ]);
-
-            const localStartLibrary = JSON.parse(localStorage.getItem('starterLibrary'));
-            setlibrary([
-              ...starterLibrary, ...localStartLibrary
-          ]);
+    const handleLibraryDelete = (index) => {
 
 
-        }, []);
+        // get local storage library page pokemon **************
+        const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
+        // looping over the starterLibrary from local storage
+        for(let i = 0; i < starterLibraryPokedex.length; i++) {
+          // if the starterLibrary contains the index(name of pokemon passed)
+          if (starterLibraryPokedex[i].name == index) {
+            // remove the pokemon with that name from the starterLibrary array
+            starterLibraryPokedex.splice(i, 1);
+          }
+        }
+        // set the starterLibrary with the removed pokemon
+        setlibrary([
+          ...starterLibraryPokedex
+        ]);
+    
+        // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
+        localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
+        console.log("Library pokemon removed")
+      
 
-    console.log(starterList);
-    console.log(starterLibrary)
+        const starterListPokedex = JSON.parse(localStorage.getItem('starterList'));
+
+        for(let i = 0; i < starterListPokedex.length; i++) {
+          if (starterListPokedex[i].name == index) {
+            starterListPokedex.splice(i, 1);
+          }
+        }
+
+        setlibrary([
+          ...starterLibraryPokedex
+        ]);
+
+        localStorage.setItem('starterList', JSON.stringify(starterListPokedex));
+        console.log("i updated starters list i think??!!!!")
+
+    }
+
+    const reloadStarters = () => {
+      const localStartPokemons = JSON.parse(localStorage.getItem('starterList'));
+      setStartList([
+        ...localStartPokemons
+      ]);
+    }
+
+    useEffect(() => {
+          const localStartPokemons = JSON.parse(localStorage.getItem('starterList'));
+              setStartList([
+                  ...starterList, ...localStartPokemons
+              ]);
+
+          const localStartLibrary = JSON.parse(localStorage.getItem('starterLibrary'));
+          setStartList([
+            ...starterLibrary, ...localStartLibrary
+        ]);
+
+      }, []);
+      // one solution was to add starterList to the dependencies array so everytime starterList is updated this useEffect runs
+    // console.log(starterList);
+    // console.log(starterLibrary)
   
-  return (
-    <UserProvider>
-      <html lang="en">
-        <PokedexContext.Provider value={{ handleNewPokedexEntry, currentBatchPokemon, handleNewBatch, setInitialPokemonList,handleNewStarterAdd,handleNewPokedexEntry, starterList, starterLibrary, handleStarterDelete, handleLibraryDelete }}>
-          <body>
-            <Header/>
-              {children}
-          </body>
-        </PokedexContext.Provider>
-      </html>
-    </UserProvider>
-  )
+    return (
+      <UserProvider>
+        <html lang="en">
+          <PokedexContext.Provider value={{ handleNewPokedexEntry, currentBatchPokemon, handleNewBatch, setInitialPokemonList,handleNewStarterAdd,handleNewPokedexEntry, starterList, starterLibrary, handleStarterDelete, handleLibraryDelete, reloadStarters }}>
+            <body>
+              <Header/>
+                {children}
+            </body>
+          </PokedexContext.Provider>
+        </html>
+      </UserProvider>
+    )
 }

@@ -3,31 +3,37 @@ import { useEffect,useState, useContext } from "react";
 import PokedexContext from '../components/context/PokedexContext';
 import classNames from "classnames";
 export default function StarterPokemon() {
+    const context = useContext(PokedexContext);
     const { handleLibraryDelete } = useContext(PokedexContext);
-    // function to remove pokemon from starter list 
-    // should not SET STATE in child component... created this function that calls function on parent component that UPDATES STATE  
-    // const rmvStart = (index) =>{
-    //     starterPokemon.splice(index,1)
-    //     console.log(starterPokemon);
-    //     // passing the starterPokemon list to the function in the parent component which will update the STATE with my passed starterPokemon
-    //     handleStarterDelete(starterPokemon);
-
-    // }
-
-// need to draw from dashboard page.js file and addToStarter function in order to create and loop through new starterList state object and populate list of starter pokemon
-    const deleteLibraryPoke = (index) => {
-        console.log(index)
-        const starterLibraryPokedex = JSON.parse(localStorage.getItem('starterLibrary'));
-        starterLibraryPokedex.splice(index, 1);
-        // after an item is deleted from startList i update the localStorage to reflect deleted pokemon 
-        localStorage.setItem('starterLibrary', JSON.stringify(starterLibraryPokedex));
-    }
-
-    // retreiving the StarterList pokemon from localStorage in order to set it to map over it 
+    const [staredList, setStaredList] = useState([]);
+    // retrieving starters pokemon so i can check the library and if the library pokemon is in the starters array 
+    
+    const Starters = JSON.parse(localStorage.getItem('starterList'));
+    console.log(Starters);
+    
     const starterLibraryPokemon = JSON.parse(localStorage.getItem('starterLibrary'));
+    console.log("********************* pokedexLibrary component  ****************")
+    console.log(starterLibraryPokemon)
+    console.log("********************* pokedexLibrary component ****************")
 
+    const staredPoke = [];
+    // useEffect to run calcStared only when Starters variable is changed ( a starter is removed from the startersList in local Storage)
+    useEffect(() => {
+        
+        for(let i = 0; i < starterLibraryPokemon.length; i++) {
+            if (Starters[i] && Starters[i][name] == starterLibraryPokemon[i][name]) {
+                staredPoke.push(Starters[i].name)
+            }
+        };
+        setStaredList([
+            ...staredPoke
+        ]);   
+        
+    }, [context.starterList]);
+    
 
-
+    console.log(staredList);
+    console.log(staredList.length);
 
     return (
         <div className="starter-pokemon-wrapper g-4 col">
@@ -46,7 +52,7 @@ export default function StarterPokemon() {
                             </tr>
                         </thead>
                         <tbody>
-                        { starterLibraryPokemon.map((pokemon,i) => {
+                        { starterLibraryPokemon.map((pokemon) => {
                             // these are all custom colors i injected into the default BOOTSTRAP SASS... here i am declaring my classname conditional EX: if  type == this then this color background 
                             // I use the classNames PACKAGE to declare here in pass to table rows instead of doing INLINE conditional on each row 
                                 const pokemonTypeClasses = classNames({
@@ -70,8 +76,8 @@ export default function StarterPokemon() {
                                     "table-psychic": pokemon.type == "psychic"
                                 });
                                 return pokemon.typeTwo ? (
-                                    <tr key={i} id={`${pokemon.name}`} className={pokemonTypeClasses}>
-                                        <th className="align-middle">{`${pokemon.name}`}</th>
+                                    <tr key={pokemon.name} id={`${pokemon.name}`} className={pokemonTypeClasses}>
+                                        <th className="align-middle">{`${pokemon.name}`} {staredList.includes(pokemon.name )? (<img className="ms-3" src={`/star-16.png`}></img>) : ""} </th>
                                         <td className="align-middle">
                                             <img style={{"height" : "22px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
                                             <img style={{"height" : "22px" , "width" : "auto"}} src={`/${pokemon.typeTwo}_type.png`} alt="Pokemon type" />
@@ -79,18 +85,19 @@ export default function StarterPokemon() {
                                         <td className="align-middle">{`${pokemon.hp}`}</td>
                                         <td className="align-middle">{`${pokemon.attack}`}</td>
                                         <td className="align-middle">{`${pokemon.defense}`}</td>
-                                        <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
-                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button"  className="bg-transparent border-0 btn-lg" onClick={() => handleLibraryDelete(i)}><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
+                                        {/* {staredList.includes(pokemon.name )? (<td className="align-middle">HHHHH</td>) :  (<td className="align-middle">HHHHHHHH</td>)} */}
+                                        <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}> <img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button"  className="bg-transparent border-0 btn-lg" onClick={() => handleLibraryDelete(pokemon.name)}><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
                                     </tr>
                                 ): (
-                                    <tr key={i} id={`${pokemon.name}`} className={pokemonTypeClasses}>
-                                        <th className="align-middle">{`${pokemon.name}`}</th>
+                                    <tr key={pokemon.name} id={`${pokemon.name}`} className={pokemonTypeClasses}>
+                                        <th className="align-middle">{`${pokemon.name}`} {staredList.includes(pokemon.name )? (<img src={`/star-16.png`}></img>) : ""} </th>
                                         <td className="align-middle"><img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" /></td>
                                         <td className="align-middle">{`${pokemon.hp}`}</td>
                                         <td className="align-middle">{`${pokemon.attack}`}</td>
                                         <td className="align-middle">{`${pokemon.defense}`}</td>
                                         <td className="align-middle" style={{"height" : "50px" , "width" : "30px"}}><img src={`${pokemon.icon}`} style={{"height" : "100%" , "width" : "100%", "objectFit" : "cover"}} /></td>
-                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" className="bg-transparent border-0 btn-lg"onClick={() => handleLibraryDelete(i)}><i className={`bi bi-x-lg ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
+                                        <td className="align-middle text-center" style={{"height" : "50px"}}><button type="button" className="bg-transparent border-0 btn-lg"onClick={() => handleLibraryDelete(pokemon.name)}><i className={`bi bi-x-lg ${pokemon.name} ${pokemon.type == "dark" ? "text-white" : ""}`}></i></button></td>
                                     </tr>
                                 )
                             })}

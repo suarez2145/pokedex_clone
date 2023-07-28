@@ -7,17 +7,11 @@ import StarterPokemon from "../components/StarterPokemon"
 import Button from 'react-bootstrap/Button';
 
 export default function Page() {
-    const context = useContext(PokedexContext);
-    const { handleNewPokedexEntry } = useContext(PokedexContext);
-    let index = 5;
+
     useEffect(() => {
         require("bootstrap/dist/js/bootstrap.bundle.min.js");
     }, []);
 
-    const showLibraryCons = () => {
-        const getStarterLibrary = JSON.parse(localStorage.getItem('starterLibrary'));
-        console.log(getStarterLibrary);
-    }
 
     const { user, error, isLoading } = useUser();
 
@@ -28,9 +22,7 @@ export default function Page() {
     if(user) {
         return (
             <div className={`container-fluid dash_cont g-0 row`}>
-                <Button className="rounded-0 me-1" onClick={() => handleNewPokedexEntry(index)}>Console Log Local Storage</Button>
                 <PokedexLibrary></PokedexLibrary>
-                <p> {context.userName}</p>
             </div>
         )
     }
