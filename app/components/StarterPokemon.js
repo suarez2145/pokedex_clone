@@ -25,7 +25,7 @@ export default function StarterPokemon() {
 
 
     return (
-        <div className="starter-pokemon-wrapper g-4 col">
+        <div className="starter-pokemon-wrapper g-4 col col-lg-8">
             <div className="starter-cont">
                 <h1>Your Starter Team</h1>
                     <table className="table">

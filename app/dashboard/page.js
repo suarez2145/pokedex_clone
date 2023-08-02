@@ -97,7 +97,7 @@ export default function Page() {
 
         if(user) {
             return (
-                <div className={`container-fluid dash_cont g-0 row`}>
+                <div id="dash-cont"className={`container-fluid dash_cont g-0 row`}>
                     <CardsSlider/>
                     <StarterPokemon/>
                 </div>

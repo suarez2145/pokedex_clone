@@ -22,8 +22,8 @@ export default function header() {
         return (
             <nav className={`${styles.change_color} navbar navbar-expand-lg bg-body-tertiary`}>
                 <div className="container-fluid">
-                    <span className="navbar-brand mb-0 h1 text-warning d-flex">
-                        Pokedex Clone App
+                    <span className="navbar-brand mb-0 h1 text-warning d-flex align-items-center">
+                    <p>Pokedex Clone App</p>
                         <figure className={`${styles.circle_eye}`}></figure>
                         </span>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@ export default function header() {
     return (
         <nav className={`${styles.change_color} navbar navbar-expand-lg bg-body-tertiary`}>
             <div className="container-fluid">
-                <span className="navbar-brand mb-0 h1 text-warning d-flex">
-                    Pokedex Clone App
+                <span className="navbar-brand mb-0 h1 text-warning d-flex align-items-center">
+                    <p>Pokedex Clone App</p>
                     <figure className={`${styles.circle_eye}`}></figure>
                     </span>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">

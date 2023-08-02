@@ -1,12 +1,14 @@
 import {useState,useEffect,useContext} from 'react';
+// import styles from './cardslider.module.scss';
 import PokedexContext from '../components/context/PokedexContext';
 import Carousel from "react-bootstrap/Carousel";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Pokedex from 'pokedex-promise-v2';
+import './cardslider.scss';
 
-export default function cardSlider({}) {
+export default function cardSlider() {
     const context = useContext(PokedexContext);
     const { handleNewBatch } = useContext(PokedexContext);
     const { handleNewPokedexEntry } = useContext(PokedexContext);
@@ -21,11 +23,66 @@ export default function cardSlider({}) {
                     newAdditionPoke = context.currentBatchPokemon[i]; 
                     let isInArray = context.starterList.includes(newAdditionPoke);
                     let isInLibArray = context.starterLibrary.includes(newAdditionPoke);
+                    
                     // if the current pokemon is NOT in the starterList then push to newAdditionPokeList and then add to starterList  AND if the starterList has less than 6 pokemon in it
                     if(!isInArray && context.starterList.length < 6) {
                         newAdditionPokeList.push(newAdditionPoke);
                         handleNewStarterAdd(newAdditionPokeList);
+
+                        // adding new alert node for successfully adding pokemon
+                        let alertNode = document.getElementById("alert");
+                        if (alertNode == null) {
+                            let container = document.querySelector("#dash-cont");
+                            let newAlert =
+                            `<div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+                                Pokemon Added to Starters & Library!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`;
+                                container.insertAdjacentHTML('beforebegin',newAlert);
+
+                                setTimeout(() => {
+                                    let alertNode = document.getElementById("alert");
+                                    alertNode.remove();
+                                    console.log("the close ran??!")
+                                }, "3000");
+                        }
+                    } else if (!isInArray && context.starterList.length >= 6) {
+                        let alertNode = document.getElementById("alert");
+                        if (alertNode == null) {
+                            let container = document.querySelector("#dash-cont");
+                            let newAlert =
+                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                Starters list FULL!!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`;
+                                container.insertAdjacentHTML('beforebegin',newAlert);
+
+                                setTimeout(() => {
+                                    let alertNode = document.getElementById("alert");
+                                    alertNode.remove();
+                                    console.log("the close ran??!")
+                                }, "3000");
+                        }
+                    } else {
+                        // adding new alert node for failed adding pokemon
+                        let alertNode = document.getElementById("alert");
+                        if (alertNode == null) {
+                            let container = document.querySelector("#dash-cont");
+                            let newAlert =
+                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                Pokemon Is already in Starters and Library!!!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`;
+                                container.insertAdjacentHTML('beforebegin',newAlert);
+
+                                setTimeout(() => {
+                                    let alertNode = document.getElementById("alert");
+                                    alertNode.remove();
+                                    console.log("the close ran??!")
+                                }, "3000");
+                        }
                     }
+
                     // checking pokedex library to make sure the current pokemon is not included and if not then we also add the new pokemon to the library
                     if(!isInLibArray && context.starterList.length < 6) {
                         newAdditionPokeList.push(newAdditionPoke);
@@ -48,10 +105,47 @@ export default function cardSlider({}) {
                 if(!isInArray) {
                     newLibraryPokemon.push(newLibraryPoke);
                     handleNewPokedexEntry(newLibraryPokemon);
+                    let container = document.querySelector("#dash-cont");
+                    let newAlert =
+                    `<div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+                        Pokemon Added to Library!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                        container.insertAdjacentHTML('beforebegin',newAlert);
+
+                        setTimeout(() => {
+                            let alertNode = document.getElementById("alert");
+                            alertNode.remove();
+                            console.log("the close ran??!")
+                        }, "3000");
+        
+                } else {
+
+                    let alertNode = document.getElementById("alert");
+                    if (alertNode == null) {
+                        let container = document.querySelector("#dash-cont");
+                        let newAlert =
+                        `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                            Pokemon Is already in Library!!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+                            container.insertAdjacentHTML('beforebegin',newAlert);
+
+                            setTimeout(() => {
+                                let alertNode = document.getElementById("alert");
+                                alertNode.remove();
+                                console.log("the close ran??!")
+                            }, "3000");
+                    }
+
                 }
                 // need to ad an else which will notify user that the chosen pokemon is already in thier list or library and if the list is full
             }
         }
+
+
+
+
     }
 
     const getNewPokemon = ((async () => {
@@ -154,8 +248,10 @@ export default function cardSlider({}) {
                                         <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
                                         <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
                                     </ListGroup>
-                                    <Button className="rounded-0 me-1" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
-                                    <Button className="rounded-0" onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                    <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
+                                        <Button className={`rounded-0 me-1 btn_txt `} onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                        <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </Carousel.Item>
@@ -180,8 +276,10 @@ export default function cardSlider({}) {
                                         <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
                                         <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
                                     </ListGroup>
-                                    <Button className="rounded-0 me-1" onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
-                                    <Button className="rounded-0" onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                    <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
+                                        <Button className={`rounded-0 me-1 btn_txt `}onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                        <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </Carousel.Item>
