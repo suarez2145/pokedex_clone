@@ -20,13 +20,19 @@ export default function header() {
 
     if (user) {
         return (
-            <nav className={`${styles.change_color} navbar navbar-expand-lg bg-body-tertiary`}>
-                <div className="container-fluid">
-                    <span className="navbar-brand mb-0 h1 text-warning d-flex align-items-center">
-                    <p>Pokedex Clone App</p>
-                        <figure className={`${styles.circle_eye}`}></figure>
-                        </span>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <nav className={`navbar navbar-expand-lg bg-body-tertiary`}>
+                <div className="container-fluid g-0 text-center">
+                <div className={`container-fluid ${styles.pokedex_clip}`}>
+                <div className="navbar-brand mb-0 h1 text-warning d-flex align-items-center">
+                        <figure className={`${styles.blue_circle_eye}`}></figure>
+
+                        <figure className={`${styles.red_circle_eye} mb-3`}></figure>
+                        <figure className={`${styles.yellow_circle_eye} mb-3`}></figure>
+                        <figure className={`${styles.green_circle_eye} mb-3`}></figure>
+                     
+                </div>
+                </div>
+                    <button className="navbar-toggler ms-auto mt-2 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarText">

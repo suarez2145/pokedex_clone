@@ -1,5 +1,14 @@
 @import "../node_modules/bootstrap/scss/functions";
 
+html {
+    height: 100%;
+    body {
+        height: 100%;
+    }
+}
+
+
+
 // Optional variable overrides here
 
 // declaring new colors that i want to place in the bootstrap default them colors 

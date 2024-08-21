@@ -1,7 +1,7 @@
 "use client";
 import { useEffect,useState,useContext } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
-import styles from './dashboard.module.scss';
+import './dashboard.scss';
 import CardsSlider from "../components/CardsSlider";
 import PokedexContext from '../components/context/PokedexContext';
 import StarterPokemon from "../components/StarterPokemon"
@@ -9,6 +9,8 @@ import Pokedex from 'pokedex-promise-v2';
 import { Noto_Rashi_Hebrew } from "next/font/google";
 
 export default function Page() {
+
+
 
         useEffect(() => {
             require("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -88,6 +90,23 @@ export default function Page() {
             }))()
     
         }, [])
+
+
+
+            //     getDistance();
+            useEffect(() => {
+                
+                let windowHeight = window.innerHeight;
+                if (user) {
+                    let testDiv = document.getElementsByClassName("starter-pokemon-wrapper");
+                    let divHght = testDiv[0].getBoundingClientRect().bottom;
+                    console.log(windowHeight - divHght);
+                } else {
+                    console.log("no testDiv???");
+                }
+
+            },)
+
 
         const { user, error, isLoading } = useUser();
 
