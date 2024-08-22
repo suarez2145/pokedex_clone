@@ -43,7 +43,6 @@ export default function cardSlider() {
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
                                     alertNode.remove();
-                                    console.log("the close ran??!")
                                 }, "3000");
                         }
                     } else if (!isInArray && context.starterList.length >= 6) {
@@ -60,7 +59,6 @@ export default function cardSlider() {
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
                                     alertNode.remove();
-                                    console.log("the close ran??!")
                                 }, "3000");
                         }
                     } else {
