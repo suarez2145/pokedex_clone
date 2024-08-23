@@ -221,11 +221,11 @@ export default function cardSlider() {
                         Explore New Pokemon?
                     </h3>
                 </div>
-                <Carousel interval={null} style={{"width" : "20rem", "height":"100%"}}>
+                <Carousel interval={null} className='carousel-container poke-card-border'>
                 { context.currentBatchPokemon.map((pokemon,i) => {
                     return pokemon.typeTwo ? (
                         <Carousel.Item key={i} id={`${pokemon.name}`}>
-                            <Card className="w-100 h-100 rounded-0">
+                            <Card className="w-100 h-100 border-0 rounded-0">
                                 <span className="d-flex justify-content-end">
                                     <p className="p-2">{`${pokemon.hp}`}HP</p>
                                 </span>
@@ -256,7 +256,7 @@ export default function cardSlider() {
                         
                     ):(
                         <Carousel.Item key={i} id={`${pokemon.name}`}>
-                            <Card className="w-100 h-100 rounded-0">
+                            <Card className="w-100 h-100 border-0">
                                 <span className="d-flex justify-content-end">
                                     <p className="p-2">{`${pokemon.hp}`}HP</p>
                                 </span>
