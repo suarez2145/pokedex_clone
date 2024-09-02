@@ -5,6 +5,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import PokedexLibrary from '../components/PokedexLibrary';
 import StarterPokemon from "../components/StarterPokemon"
 import Button from 'react-bootstrap/Button';
+import styles from './library.module.scss';
 
 export default function Page() {
 
@@ -21,7 +22,7 @@ export default function Page() {
 
     if(user) {
         return (
-            <div className={`container-fluid dash_cont g-0 row`}>
+            <div className={`container-fluid ${styles.dash_cont} g-0 row`}>
                 <PokedexLibrary></PokedexLibrary>
             </div>
         )

@@ -13,11 +13,14 @@ export default function cardSlider() {
     const { handleNewBatch } = useContext(PokedexContext);
     const { handleNewPokedexEntry } = useContext(PokedexContext);
     const { handleNewStarterAdd } = useContext(PokedexContext);
+    const [activeIndex, setActiveIndex] = useState(0); 
 
     const addNewPokeToTeam = (pokemonDetails) => {
+        console.log(pokemonDetails, 'poke details here')
             let newAdditionPokeList = [];
             let currentPokemon = pokemonDetails;
             let newAdditionPoke;
+
             for(let i = 0; i < context.currentBatchPokemon.length; i++) {
                 if(context.currentBatchPokemon[i].name == currentPokemon) {
                     newAdditionPoke = context.currentBatchPokemon[i]; 
@@ -31,19 +34,22 @@ export default function cardSlider() {
 
                         // adding new alert node for successfully adding pokemon
                         let alertNode = document.getElementById("alert");
+
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-                                Pokemon Added to Starters & Library!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `<div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-added alert-success alert-dismissible fade show rounded-0" role="alert">
+                                    Pokemon Added to Starters & Library!
+                                </div>
+                            </div>`;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
-                                    console.log("the close ran??!")
+                                    alertWrapper.remove();
                                 }, "3000");
                         }
                     } else if (!isInArray && context.starterList.length >= 6) {
@@ -51,16 +57,18 @@ export default function cardSlider() {
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                                Starters list FULL!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `<div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-added alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                    Starters list FULL!!
+                                </div>
+                            </div>`;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
-                                    console.log("the close ran??!")
+                                    alertWrapper.remove();
                                 }, "3000");
                         }
                     } else {
@@ -69,15 +77,20 @@ export default function cardSlider() {
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                                Pokemon Is already in Starters and Library!!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `
+                            <div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                    Pokemon Is already in Starters and Library!!!
+                                </div>
+                            </div>
+                            `;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
+                                    alertWrapper.remove();
                                     console.log("the close ran??!")
                                 }, "3000");
                         }
@@ -107,15 +120,20 @@ export default function cardSlider() {
                     handleNewPokedexEntry(newLibraryPokemon);
                     let container = document.querySelector("#dash-cont");
                     let newAlert =
-                    `<div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-                        Pokemon Added to Library!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>`;
+                    `
+                    <div id="alert-wrapper-node" class="alert-wrapper">
+                        <div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+                            Pokemon Added to Library!
+                        </div>
+                    </div>
+                    `;
                         container.insertAdjacentHTML('beforebegin',newAlert);
 
                         setTimeout(() => {
                             let alertNode = document.getElementById("alert");
+                            let alertWrapper = document.getElementById("alert-wrapper-node")
                             alertNode.remove();
+                            alertWrapper.remove();
                             console.log("the close ran??!")
                         }, "3000");
         
@@ -125,15 +143,20 @@ export default function cardSlider() {
                     if (alertNode == null) {
                         let container = document.querySelector("#dash-cont");
                         let newAlert =
-                        `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                            Pokemon Is already in Library!!
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>`;
+                        `
+                        <div id="alert-wrapper-node" class="alert-wrapper">
+                            <div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                Pokemon Is already in Library!!
+                            </div>
+                        </div>
+                            `;
                             container.insertAdjacentHTML('beforebegin',newAlert);
 
                             setTimeout(() => {
                                 let alertNode = document.getElementById("alert");
+                                let alertWrapper = document.getElementById("alert-wrapper-node")
                                 alertNode.remove();
+                                alertWrapper.remove();
                                 console.log("the close ran??!")
                             }, "3000");
                     }
@@ -223,72 +246,81 @@ export default function cardSlider() {
                         Explore New Pokemon?
                     </h3>
                 </div>
-                <Carousel interval={null} style={{"width" : "20rem", "height":"100%"}}>
-                { context.currentBatchPokemon.map((pokemon,i) => {
-                    return pokemon.typeTwo ? (
-                        <Carousel.Item key={i} id={`${pokemon.name}`}>
-                            <Card className="w-100 h-100 rounded-0">
-                                <span className="d-flex justify-content-end">
-                                    <p className="p-2">{`${pokemon.hp}`}HP</p>
-                                </span>
-                                <Card.Img variant="top" style={{"height" : "200px" , "width" : "auto"}} src={`${pokemon.imgUrl}`} />
-                                <Card.Body>
-                                    <Card.Title className="d-flex justify-content-between align-items-center">
-                                        <span>{`${pokemon.name}`}</span>
-                                        <div>
-                                            <img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
-                                            <img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.typeTwo}_type.png`} alt="Pokemon type" />
-                                        </div>
-                                    </Card.Title>
-                                    <Card.Text>
-                                        {`${pokemon.description}`}
-                                    </Card.Text>
-                                    <ListGroup horizontal className="text-center">
-                                        <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
-                                        <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
-                                        <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
-                                    </ListGroup>
-                                    <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
-                                        <Button className={`rounded-0 me-1 btn_txt `} onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
-                                        <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Carousel.Item>
-                        
-                    ):(
-                        <Carousel.Item key={i} id={`${pokemon.name}`}>
-                            <Card className="w-100 h-100 rounded-0">
-                                <span className="d-flex justify-content-end">
-                                    <p className="p-2">{`${pokemon.hp}`}HP</p>
-                                </span>
-                                <Card.Img variant="top" style={{"height" : "200px" , "width" : "auto"}} src={`${pokemon.imgUrl}`} />
-                                <Card.Body>
-                                    <Card.Title className="d-flex justify-content-between align-items-center">
-                                        <span>{`${pokemon.name}`}</span>
-                                            <img style={{"height" : "30px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
-                                    </Card.Title>
-                                    <Card.Text>
-                                        {`${pokemon.description}`}
-                                    </Card.Text>
-                                    <ListGroup horizontal className="text-center">
-                                        <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
-                                        <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
-                                        <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
-                                    </ListGroup>
-                                    <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
-                                        <Button className={`rounded-0 me-1 btn_txt `}onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
-                                        <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Carousel.Item>
-                    )
-                })}
+                <Carousel interval={null} activeIndex={activeIndex} onSelect={setActiveIndex} className='carousel-container poke-card-border'>
+
+                {/* this conditional to check for new batch length and display loader while ALL pokemon are loading */}
+                {context.currentBatchPokemon.length < 10 ? (
+                    <div className="d-flex justify-content-center align-items-center" style={{"marginTop" : "30vh"}}>
+                    ... <img style={{"height" : "100px" , "width" : "auto"}} src="/lucas_with_dragonite_by_liftedwing_d2sdg2i.gif" alt="my-gif...Loading" />
+                    </div>
+                ): (
+                    context.currentBatchPokemon.map((pokemon,i) => {
+                        return pokemon.typeTwo ? (
+                            <Carousel.Item key={i} id={`${pokemon.name}`}>
+                                <Card className="w-100 h-100 border-0 rounded-0">
+                                    <span className="d-flex justify-content-end">
+                                        <p className="p-2">{`${pokemon.hp}`}HP</p>
+                                    </span>
+                                    <Card.Img variant="top" style={{"height" : "200px" , "width" : "auto"}} src={`${pokemon.imgUrl}`} />
+                                    <Card.Body>
+                                        <Card.Title className="d-flex justify-content-between align-items-center">
+                                            <span>{`${pokemon.name}`}</span>
+                                            <div>
+                                                <img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
+                                                <img style={{"height" : "25px" , "width" : "auto"}} src={`/${pokemon.typeTwo}_type.png`} alt="Pokemon type" />
+                                            </div>
+                                        </Card.Title>
+                                        <Card.Text>
+                                            {`${pokemon.description}`}
+                                        </Card.Text>
+                                        <ListGroup horizontal className="text-center">
+                                            <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
+                                            <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
+                                            <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
+                                        </ListGroup>
+                                        {/* <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
+                                            <Button className={`rounded-0 me-1 btn_txt `} onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                            <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                        </div> */}
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                        ):(
+                            <Carousel.Item key={i} id={`${pokemon.name}`}>
+                                <Card className="w-100 h-100 border-0">
+                                    <span className="d-flex justify-content-end">
+                                        <p className="p-2">{`${pokemon.hp}`}HP</p>
+                                    </span>
+                                    <Card.Img variant="top" style={{"height" : "200px" , "width" : "auto"}} src={`${pokemon.imgUrl}`} />
+                                    <Card.Body>
+                                        <Card.Title className="d-flex justify-content-between align-items-center">
+                                            <span>{`${pokemon.name}`}</span>
+                                                <img style={{"height" : "30px" , "width" : "auto"}} src={`/${pokemon.type}_type.png`} alt="Pokemon type" />
+                                        </Card.Title>
+                                        <Card.Text>
+                                            {`${pokemon.description}`}
+                                        </Card.Text>
+                                        <ListGroup horizontal className="text-center">
+                                            <ListGroup.Item className="border-0">{`${pokemon.attack}`} Attack</ListGroup.Item>
+                                            <ListGroup.Item className="border-0">{`${pokemon.defense}`} Defense</ListGroup.Item>
+                                            <ListGroup.Item className="border-0">{`${pokemon.speed}`} Speed</ListGroup.Item>
+                                        </ListGroup>
+                                        {/* <div className="container-fluid g-0 d-flex justify-content-between mt-3 mb-5">
+                                            <Button className={`rounded-0 me-1 btn_txt `}onClick={() => addNewPokeToTeam(pokemon.name)}>Add To Starter</Button>
+                                            <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(pokemon.name)}>Add To Pokedex</Button>
+                                        </div> */}
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                        )
+                    })
+                ) }
                 </Carousel>
                 <div className="new-pokemon-wrapper mt-2 d-flex justify-content-end"style={{"width" : "20rem"}}>
                     <Button className="rounded-0" onClick= {() => getNewPokemon()}>New Batch</Button>
                     {/* <Button className="rounded-0" onClick={addToStarter(`${pokemon.name}`)}>SEE ID</Button> */}
+                    <Button className={`rounded-0 me-1 btn_txt `}onClick={() => addNewPokeToTeam(context.currentBatchPokemon[activeIndex].name)}>Add To Starter</Button>
+                    <Button className={`rounded-0 btn_txt `} onClick={() => addNewPokeToLibrary(context.currentBatchPokemon[activeIndex].name)}>Add To Pokedex</Button>
                 </div>
             </div>
         )

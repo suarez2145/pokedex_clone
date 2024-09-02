@@ -2,6 +2,8 @@
 import { useEffect,useState, useContext } from "react";
 import PokedexContext from '../components/context/PokedexContext';
 import classNames from "classnames";
+import styles from './pokedexlibrary.module.scss';
+
 export default function StarterPokemon() {
     const context = useContext(PokedexContext);
     const { handleLibraryDelete } = useContext(PokedexContext);
@@ -36,9 +38,9 @@ export default function StarterPokemon() {
     console.log(staredList.length);
 
     return (
-        <div className="starter-pokemon-wrapper g-4 col">
-            <div className="starter-cont table-responsive">
-                <h1>Your Pokedex</h1>
+        <div className={`g-4 col`}>
+            <h1>Your Pokedex</h1>
+            <div className={`mb-3 table-responsive`}>
                     <table className="table">
                         <thead>
                             <tr>

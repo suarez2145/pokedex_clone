@@ -1,7 +1,7 @@
 "use client";
 import { useEffect,useState,useContext } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
-import './dashboard.scss';
+import styles from './dashboard.module.scss'
 import CardsSlider from "../components/CardsSlider";
 import PokedexContext from '../components/context/PokedexContext';
 import StarterPokemon from "../components/StarterPokemon"
@@ -116,7 +116,7 @@ export default function Page() {
 
         if(user) {
             return (
-                <div id="dash-cont"className={`container-fluid dash_cont g-0 row`}>
+                <div id="dash-cont" className={`container-fluid ${styles.dash_cont} g-0 row`}>
                     <CardsSlider/>
                     <StarterPokemon/>
                 </div>

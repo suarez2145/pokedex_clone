@@ -140,7 +140,7 @@ export default function RootLayout({ children }) {
     return (
       <UserProvider>
         <html lang="en">
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"/>
+        <meta name="viewport"/>
           <PokedexContext.Provider value={{ handleNewPokedexEntry, currentBatchPokemon, handleNewBatch, setInitialPokemonList,handleNewStarterAdd,handleNewPokedexEntry, starterList, starterLibrary, handleStarterDelete, handleLibraryDelete, reloadStarters }}>
             <body className="border_custom">
               <Header/>
