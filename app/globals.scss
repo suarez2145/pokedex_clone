@@ -1,27 +1,10 @@
 @import "../node_modules/bootstrap/scss/functions";
 
-html {
-    height: 100%;
-    body {
-        height: 100%;
-    }
-}
-
-
 .border_custom {
     border: 15px solid #e81638;
+    min-height: 100vh;
 }
 
-@media only screen and (max-width: 1200px) {
-
-    html {
-        height: unset;
-        body {
-            height: unset;
-        }
-    }
-
-}
 
 
 

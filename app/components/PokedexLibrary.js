@@ -38,9 +38,9 @@ export default function StarterPokemon() {
     console.log(staredList.length);
 
     return (
-        <div className={`${styles.library_wrapper } g-4 col`}>
+        <div className={`g-4 col`}>
             <h1>Your Pokedex</h1>
-            <div className={`${styles.library_container} mb-3 table-responsive`}>
+            <div className={`mb-3 table-responsive`}>
                     <table className="table">
                         <thead>
                             <tr>
