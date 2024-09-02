@@ -18,6 +18,7 @@ export default function cardSlider() {
             let newAdditionPokeList = [];
             let currentPokemon = pokemonDetails;
             let newAdditionPoke;
+
             for(let i = 0; i < context.currentBatchPokemon.length; i++) {
                 if(context.currentBatchPokemon[i].name == currentPokemon) {
                     newAdditionPoke = context.currentBatchPokemon[i]; 
@@ -31,18 +32,23 @@ export default function cardSlider() {
 
                         // adding new alert node for successfully adding pokemon
                         let alertNode = document.getElementById("alert");
+
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-                                Pokemon Added to Starters & Library!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `<div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-added alert-success alert-dismissible fade show rounded-0" role="alert">
+                                    Pokemon Added to Starters & Library!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close""></button>
+                                </div>
+                            </div>`;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
+                                    alertWrapper.remove();
                                 }, "3000");
                         }
                     } else if (!isInArray && context.starterList.length >= 6) {
@@ -50,15 +56,19 @@ export default function cardSlider() {
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                                Starters list FULL!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `<div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-added alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                    Starters list FULL!!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>`;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
+                                    alertWrapper.remove();
                                 }, "3000");
                         }
                     } else {
@@ -67,15 +77,21 @@ export default function cardSlider() {
                         if (alertNode == null) {
                             let container = document.querySelector("#dash-cont");
                             let newAlert =
-                            `<div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                                Pokemon Is already in Starters and Library!!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>`;
+                            `
+                            <div id="alert-wrapper-node" class="alert-wrapper">
+                                <div id="alert" class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                                    Pokemon Is already in Starters and Library!!!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                            `;
                                 container.insertAdjacentHTML('beforebegin',newAlert);
 
                                 setTimeout(() => {
                                     let alertNode = document.getElementById("alert");
+                                    let alertWrapper = document.getElementById("alert-wrapper-node")
                                     alertNode.remove();
+                                    alertWrapper.remove();
                                     console.log("the close ran??!")
                                 }, "3000");
                         }

@@ -24,6 +24,18 @@
 
 }
 
+.alert-wrapper{
+    display: flex;
+    position: fixed;
+    width: 100%;
+    justify-content: center;
+
+    .alert-added {
+        width: 16em;
+        margin-bottom: 0;
+    }
+}
+
 .poke-card-border {
     border: 13px solid gray !important;
 }

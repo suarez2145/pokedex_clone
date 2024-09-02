@@ -7,7 +7,7 @@ import styles from './page.module.scss'
 
 export default function Home() {
   return (
-      <div>
+      <div className='test-class'>
         <nav className={`navbar navbar-expand-lg bg-body-tertiary`}>
             <div className="container-fluid g-0 text-center">
             <div className={`container-fluid ${styles.pokedex_clip}`}>

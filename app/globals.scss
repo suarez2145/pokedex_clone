@@ -6,8 +6,21 @@ html {
         height: 100%;
     }
 }
+
+
 .border_custom {
     border: 15px solid #e81638;
+}
+
+@media only screen and (max-width: 1200px) {
+
+    html {
+        height: unset;
+        body {
+            height: unset;
+        }
+    }
+
 }
 
 
